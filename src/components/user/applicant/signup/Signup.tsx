@@ -1,4 +1,4 @@
-import {Link, useHistory} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import {routes} from 'constants/routes'
 import React, {useContext, useState} from 'react'
 import {Button, FormGroup, FormControl, FormLabel, FormCheck, InputGroup} from 'react-bootstrap'

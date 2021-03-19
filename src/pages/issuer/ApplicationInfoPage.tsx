@@ -2,7 +2,6 @@ import React from 'react';
 import { useHistory, RouteComponentProps } from 'react-router-dom';
 import {Button} from 'react-bootstrap';
 import ApiService from 'utils/apiService';
-import { UnsignedW3cCredential } from 'utils/apis';
 import { routes } from 'constants/routes';
 import firebase from 'utils/firebase/firebase';
 
@@ -12,14 +11,14 @@ interface IProps {
 }
 
 const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IProps): React.ReactElement => {
-  const { payload, applicationID, docID } = props.location.state.state;
+  const { username, payload, applicationID, docID, approved } = props.location.state.state;
+  const holderID = payload.holder.id;
   const { givenName, familyName } = payload.credentialSubject.data;
-  const { idClass, issueDate, issuer } = payload.credentialSubject.data.hasIDDocument.hasIDDocument;
+  const { idClass, issueDate, issuer, documentType } = payload.credentialSubject.data.hasIDDocument.hasIDDocument;
   const { country, drivingClass } = JSON.parse(idClass)
-  const unsignedVC: UnsignedW3cCredential = payload;
 
   const history = useHistory();
-  
+
   /**
    * Function for signing an unsigned VC.
   * */
@@ -27,20 +26,22 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
     try {
       // sign the VC
       const {signedCredential} = await ApiService.signVC({
-        unsignedCredential: unsignedVC
+        unsignedCredential: payload
       })
 
-      // store the VC
-      await ApiService.storeSignedVCs({
-        data: [signedCredential]
-      });
+      const db = firebase.firestore();
+      
+      // Store the information under Approved Table
+      db.collection('drivinglicense-approved').add({ username, payload, applicationID, approved: true });
+
+      // Store the information at the Holder's Table
+      db.collection(`${holderID}`).add({documentType, signedCredential});
+
+      // Delete the information under the Pending Approval Table
+      db.collection('drivinglicense-waiting-approval').doc(docID).delete();
 
       alert('Unsigned VC has been approved and successfully signed.');
-
       history.push(routes.ISSUER);
-
-      const db = firebase.firestore();
-      db.collection('drivinglicense-demo-1').doc(docID).delete();
     } catch (error) {
       ApiService.alertWithBrowserConsole(error.message);
     }
@@ -58,8 +59,13 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
         <p><strong>Driving Class:</strong> {drivingClass}</p>
         <Button style={{display: 'block', margin: '10px 0 0 0'}}>View Proof of Document</Button>
 
-        <Button style={{display: 'block', margin: '10px 0 0 0'}} onClick={approveVC}>Approve</Button>
-        <Button style={{display: 'block', margin: '10px 0 0 0'}} disabled>Reject</Button>
+        { !approved ? (
+          <>
+           <Button style={{display: 'block', margin: '10px 0 0 0'}} onClick={approveVC}>Approve</Button>
+           <Button style={{display: 'block', margin: '10px 0 0 0'}} disabled>Reject</Button>
+          </>
+          ) : null}
+       
       </div>
     </div>
   )

@@ -11,7 +11,7 @@ interface IData {
 
 interface IProps {
     children?: React.ReactNode,
-    data: IData
+    data: IData,
 }
 
 const AdminList: React.FC<IProps & RouteComponentProps> = (props): any => {
@@ -22,7 +22,7 @@ const AdminList: React.FC<IProps & RouteComponentProps> = (props): any => {
     history.push({
       pathname: `${routes.ISSUER_VIEW_APPLICATION}`,
     }, {
-      state: props.data
+      state: props.data,
     });
   }
 

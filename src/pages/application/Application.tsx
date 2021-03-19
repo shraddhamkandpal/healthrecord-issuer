@@ -3,7 +3,6 @@ import AppContext from 'context/app';
 import {Button, FormControl, FormGroup, FormLabel, FormFile} from 'react-bootstrap';
 import ApiService from 'utils/apiService';
 import {drivingLicenseVCData} from 'utils/vc-data-examples/drivinglicense';
-import {UnsignedW3cCredential, W3cCredential} from 'utils/apis';
 import 'pages/application/Application.scss'
 import firebase from 'utils/firebase/firebase';
 import randomstring from 'randomstring';
@@ -11,7 +10,7 @@ import randomstring from 'randomstring';
 interface IBaseVCData {
     givenName: string;
     familyName: string;
-    issueDate: string
+    issueDate: string;
   }
   
   interface IExtendVCData {
@@ -62,34 +61,34 @@ const Application: React.FC = (): React.ReactElement => {
      * Function for issuing an unsigned employment VC.
      * */
     const issueDrivingLicensePersonVC = async () => {
-      try {
-        if (isJson(VCschemaData)) {
-          const example = {...JSON.parse(VCschemaData)}
+        try {
+            if (isJson(VCschemaData)) {
+            const example = {...JSON.parse(VCschemaData)}
 
-          const { givenName, familyName, issueDate } = baseVCData;
+            const { givenName, familyName, issueDate } = baseVCData;
 
-          // Generate a random Affinidi Driving License ID, which will double up as an application ID
-          const applicationID: string = randomstring.generate(10);
-          const vcToStringify = {...extendVCData, affinidiDrivingLicenseID: applicationID}
-          
-          example.data.givenName = givenName;
-          example.data.familyName = familyName;
-          example.data.hasIDDocument.hasIDDocument.issueDate = issueDate;
-          example.data.hasIDDocument.hasIDDocument.idClass = JSON.stringify(vcToStringify)
+            // Generate a random Affinidi Driving License ID, which will double up as an application ID
+            const applicationID: string = randomstring.generate(10);
+            const vcToStringify = {...extendVCData, affinidiDrivingLicenseID: applicationID}
+            
+            example.data.givenName = givenName;
+            example.data.familyName = familyName;
+            example.data.hasIDDocument.hasIDDocument.issueDate = issueDate;
+            example.data.hasIDDocument.hasIDDocument.idClass = JSON.stringify(vcToStringify)
 
-          example.holderDid = inputDID || appState.didToken || '';
+            example.holderDid = inputDID || appState.didToken || '';
 
-          const {unsignedVC} = await ApiService.issueUnsignedVC(example);
+            const {unsignedVC} = await ApiService.issueUnsignedVC(example);
 
-          // Store unsignedVC into issuer's database
-          const db = firebase.firestore();
-          db.collection('drivinglicense-demo-1').add({username: appState.username, payload: unsignedVC, applicationID})
+            // Store unsignedVC into issuer's database
+            const db = firebase.firestore();
+            db.collection('drivinglicense-waiting-approval').add({username: appState.username, payload: unsignedVC, applicationID, approved: false})
 
-          alert('You have successfully submitted your application. (Unsigned VC successfully created.)');
+            alert('You have successfully submitted your application. (Unsigned VC successfully created.)');
+            }
+        } catch (error) {
+            ApiService.alertWithBrowserConsole(error.message);
         }
-      } catch (error) {
-        ApiService.alertWithBrowserConsole(error.message);
-      }
     }
     
     const resetToDefaults = () => {
