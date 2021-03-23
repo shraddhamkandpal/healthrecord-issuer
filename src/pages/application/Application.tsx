@@ -139,7 +139,7 @@ const Application: React.FC = (): React.ReactElement => {
 
           <FormGroup controlId='drivingClass'>
             <FormLabel style={{margin: '10px 0 0 0'}}>Driving Class:</FormLabel>
-            <FormControl name='drivingClass' as="select" defaultValue={extendVCData.drivingClass} value={extendVCData.drivingClass} onChange={e => updateExtendBaseVC(e)}>
+            <FormControl name='drivingClass' as="select" value={extendVCData.drivingClass} onChange={e => updateExtendBaseVC(e)}>
               <option>1</option>
               <option>2</option>
               <option>2A</option>

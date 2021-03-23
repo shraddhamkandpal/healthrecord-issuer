@@ -1,4 +1,7 @@
+import { config } from 'dotenv';
 import firebase from 'firebase';
+
+config();
 
 interface IFirebaseConfig {
     apiKey: string,
@@ -10,12 +13,12 @@ interface IFirebaseConfig {
 }
 
 const firebaseConfig: IFirebaseConfig = {
-    apiKey: "AIzaSyATOMZfVcKWOsRN3pug5s4eo8X5CUwuFZs",
-    authDomain: "mong-drivinglicense-demo-1.firebaseapp.com",
-    projectId: "mong-drivinglicense-demo-1",
-    storageBucket: "mong-drivinglicense-demo-1.appspot.com",
-    messagingSenderId: "934151540540",
-    appId: "1:934151540540:web:9a6d29cb3f68549532d839"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
+    authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMIN || '',
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET || '',
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || '',
+    appId: process.env.REACT_APP_FIREBASE_APP_ID || ''
 };
 
 firebase.initializeApp(firebaseConfig);

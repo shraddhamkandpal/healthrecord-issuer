@@ -1,6 +1,6 @@
 import React from 'react';
 import {render} from '@testing-library/react';
-import ApiKeyPage from 'pages/api-key/ApiKey.tsx';
+import ApiKeyPage from 'pages/api-key/ApiKey';
 import {MemoryRouter} from 'react-router-dom';
 
 describe('User Signup Page test', () => {

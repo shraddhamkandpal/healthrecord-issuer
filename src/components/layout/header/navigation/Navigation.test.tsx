@@ -1,67 +1,68 @@
-// import React from 'react';
-// import {render} from '@testing-library/react';
-// import userEvent from '@testing-library/user-event'
-// import LayoutHeaderNavigation from 'components/layout/header/navigation/Navigation';
-// import {Router} from 'react-router-dom'
-// import AppContext, {appContextDefaultValue, AppContextState} from 'context/app';
-// import { createMemoryHistory } from 'history';
-// import {routes} from 'constants/routes';
+/* eslint-disable jest/no-conditional-expect */
+import React from 'react';
+import {render} from '@testing-library/react';
+import userEvent from '@testing-library/user-event'
+import LayoutHeaderNavigation from 'components/layout/header/navigation/Navigation';
+import {Router} from 'react-router-dom'
+import AppContext, {appContextDefaultValue, AppContextState} from 'context/app';
+import { createMemoryHistory } from 'history';
+import {routes} from 'constants/routes';
 
-// const history = createMemoryHistory()
-// const testUserName = 'testUser';
+const history = createMemoryHistory()
+const testUserName = 'testUser';
 
-// function renderNavigationWithContext(options?: Partial<AppContextState>) {
-//   return render(
-//     <Router history={history}>
-//       <AppContext.Provider value={{
-//         appState: {...appContextDefaultValue.appState, ...options},
-//         setAppState: () => {}
-//       }}>
-//         <LayoutHeaderNavigation />
-//       </AppContext.Provider>
-//     </Router>
-//   )
-// }
+function renderNavigationWithContext(options?: Partial<AppContextState>) {
+  return render(
+    <Router history={history}>
+      <AppContext.Provider value={{
+        appState: {...appContextDefaultValue.appState, ...options},
+        setAppState: () => {}
+      }}>
+        <LayoutHeaderNavigation />
+      </AppContext.Provider>
+    </Router>
+  )
+}
 
-// describe('Layout Header Navigation component test', () => {
-//   test('Check if component renders properly (user not logged in)', () => {
-//     const {getByText} = renderNavigationWithContext();
-//     const getStartedAnchor = getByText('Get started');
+describe('Layout Header Navigation component test', () => {
+  test('Check if component renders properly (user not logged in)', () => {
+    const {getByText} = renderNavigationWithContext();
+    const startAnchor = getByText('Start applying Driving License');
 
-//     expect(getStartedAnchor).toBeTruthy();
+    expect(startAnchor).toBeTruthy();
 
-//     userEvent.click(getStartedAnchor);
+    userEvent.click(startAnchor);
 
-//     expect(history.location.pathname).toBe(routes.USER)
-//   })
+    expect(history.location.pathname).toBe(routes.APPLICANT_LOGIN)
+  })
 
-//   test('Check if component renders properly (user logged in)', () => {
-//     const {getByText} = renderNavigationWithContext({username: testUserName, isAuthenticated: true});
+  test('Check if component renders properly (user logged in)', () => {
+    const {getByText} = renderNavigationWithContext({username: testUserName, isAuthenticated: true});
 
-//     expect(getByText('Logout')).toBeTruthy();
-//     expect(getByText(testUserName, {exact: false})).toBeTruthy();
-//   })
+    expect(getByText('Logout')).toBeTruthy();
+    expect(getByText(testUserName, {exact: false})).toBeTruthy();
+  })
 
-//   test('Check if navigation toggles', () => {
-//     Object.defineProperty(global, 'innerWidth', {writable: true, configurable: true, value: 200})
-//     global.dispatchEvent(new Event('resize'));
+  test('Check if navigation toggles', () => {
+    Object.defineProperty(global, 'innerWidth', {writable: true, configurable: true, value: 200})
+    global.dispatchEvent(new Event('resize'));
 
-//     const {getByRole, container} = renderNavigationWithContext();
+    const {getByRole, container} = renderNavigationWithContext();
 
-//     const toggleButton = getByRole('button', {name: 'Toggle navigation'});
-//     const navbar = container.querySelector('.navbar-collapse');
+    const toggleButton = getByRole('button', {name: 'Toggle navigation'});
+    const navbar = container.querySelector('.navbar-collapse');
 
-//     expect(toggleButton).toBeTruthy()
+    expect(toggleButton).toBeTruthy()
 
-//     if( navbar ) {
-//       expect(navbar.classList.contains('show')).toBeFalsy();
+    if( navbar ) {
+      expect(navbar.classList.contains('show')).toBeFalsy();
 
-//       userEvent.click(toggleButton);
+      userEvent.click(toggleButton);
 
-//       expect(navbar.classList.contains('show')).toBeTruthy();
-//     }
-//     else {
-//       throw new Error(`Navbar element doesn't exist.`)
-//     }
-//   })
-// })
+      expect(navbar.classList.contains('show')).toBeTruthy();
+    }
+    else {
+      throw new Error(`Navbar element doesn't exist.`)
+    }
+  })
+})

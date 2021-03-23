@@ -1,12 +1,12 @@
 import React from 'react';
 import {act, fireEvent, render} from '@testing-library/react';
-import UserSignup from 'components/user/signup/Signup';
+import ApplicantSignup from 'components/user/applicant/signup/Signup';
 import {MemoryRouter} from 'react-router-dom';
 import ApiService from 'utils/apiService';
 import userEvent from '@testing-library/user-event';
 
 const getComponentElements = () => {
-  const {getByRole, getByLabelText} = render(<MemoryRouter><UserSignup/></MemoryRouter>)
+  const {getByRole, getByLabelText} = render(<MemoryRouter><ApplicantSignup/></MemoryRouter>)
 
   return {
     usernameField: getByLabelText('Username'),

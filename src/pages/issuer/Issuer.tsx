@@ -9,10 +9,15 @@ const Issuer: React.FC = (): React.ReactElement => {
     
   useEffect(() => {
     const fetchDataHelper = async (table: string) => {
-      const db = firebase.firestore();
-      const fetch = await db.collection(table).get()
-      const information = fetch.docs.map(doc => {return {...doc.data(), docID: doc.id}})
-      return information
+      try {
+        const db = firebase.firestore();
+        const fetch = await db.collection(table).get()
+        const information = fetch.docs.map(doc => {return {...doc.data(), docID: doc.id}})
+        return information
+      } catch (error) {
+        console.log(error);
+        return []
+      }
     };
 
     const fetchData = async () => {

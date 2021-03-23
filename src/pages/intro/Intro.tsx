@@ -1,6 +1,7 @@
 import React from 'react';
 import 'pages/intro/Intro.scss'
 import EntireFlow from 'assets/images/icons/entire-flow.png';
+import {routes} from 'constants/routes';
 
 /**
  * Stateless component responsible for rendering a simple SSI introduction screen.
@@ -40,6 +41,7 @@ const IntroPage = () => {
         </div>
       </div>
 
+      <p>Ready to try out the application? Get started <a href={routes.APPLICANT_LOGIN} rel='noreferrer'>here</a> by being the applicant first!</p>
       <p>For more information and well documented tutorials, please visit <a href='https://www.affinidi.com/api' target='_blank' rel='noreferrer'>https://www.affinidi.com/api</a>.</p>
     </div>
   )
