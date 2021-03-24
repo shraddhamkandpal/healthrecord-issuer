@@ -28,7 +28,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --runInBand --slient",
+    "test": "react-scripts test --runInBand --silent",
     "test-with-coverage": "react-scripts test --coverage --runInBand --silent",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .tsx"
