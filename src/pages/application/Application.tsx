@@ -14,9 +14,11 @@ interface IBaseVCData {
   }
   
   interface IExtendVCData {
-    drivingLicenseID: string,
-    country: string,
-    drivingClass: string,
+    drivingLicenseID: string;
+    country: string;
+    drivingClass: string;
+    email: string;
+    issuerOrganization: string;
   }
   
   const defaultBaseVCData: IBaseVCData = {
@@ -27,72 +29,55 @@ interface IBaseVCData {
   
   const defaultExtendVCData: IExtendVCData = {
     drivingLicenseID: '',
-    country: '',
-    drivingClass: '',
+    country: 'Singapore',
+    drivingClass: '1',
+    email: '',
+    issuerOrganization: 'Automobile Association of Singapore'
   }
+
+interface IPayload extends IBaseVCData{
+  idClass: string;
+  holderDid: string
+}
 
 const Application: React.FC = (): React.ReactElement => {
     const {appState} = useContext(AppContext);
-    const [VCschemaData, setVCschemaData] = useState<any>(JSON.stringify(drivingLicenseVCData));
     const [inputDID, setinputDID] = useState(appState.didToken || '')
 
-    const [baseVCData, setBaseVCData] = useState<IBaseVCData>({
-      givenName: '',
-      familyName: '',
-      issueDate: '',
-    })
+    const [baseVCData, setBaseVCData] = useState<IBaseVCData>(defaultBaseVCData)
   
-    const [extendVCData, setExtendVCData] = useState<IExtendVCData>({
-      drivingLicenseID: '',
-      country: 'Singapore',
-      drivingClass: '1',
-    })
-
-    const isJson = (str: string) => {
-      try {
-          JSON.parse(str);
-      } catch (e) {
-          return false;
-      }
-      return true;
-    }
+    const [extendVCData, setExtendVCData] = useState<IExtendVCData>(defaultExtendVCData)
 
     /**
      * Function for issuing an unsigned employment VC.
      * */
     const issueDrivingLicensePersonVC = async () => {
         try {
-            if (isJson(VCschemaData)) {
-            const example = {...JSON.parse(VCschemaData)}
+          const { givenName, familyName, issueDate } = baseVCData;
 
-            const { givenName, familyName, issueDate } = baseVCData;
+          // Generate a random Affinidi Driving License ID, which will double up as an application ID
+          const applicationID: string = randomstring.generate(10);
+          const vcToStringify = {...extendVCData, affinidiDrivingLicenseID: applicationID}
+          
+          const payload: IPayload = {
+            givenName,
+            familyName,
+            issueDate,
+            idClass: JSON.stringify(vcToStringify),
+            holderDid: inputDID || appState.didToken || '',
+          }
 
-            // Generate a random Affinidi Driving License ID, which will double up as an application ID
-            const applicationID: string = randomstring.generate(10);
-            const vcToStringify = {...extendVCData, affinidiDrivingLicenseID: applicationID}
-            
-            example.data.givenName = givenName;
-            example.data.familyName = familyName;
-            example.data.hasIDDocument.hasIDDocument.issueDate = issueDate;
-            example.data.hasIDDocument.hasIDDocument.idClass = JSON.stringify(vcToStringify)
+          // Store unsignedVC into issuer's datsabase
+          const db = firebase.firestore();
+          db.collection('drivinglicense-waiting-approval').add({username: appState.username, payload, applicationID, approved: false})
 
-            example.holderDid = inputDID || appState.didToken || '';
-
-            const {unsignedVC} = await ApiService.issueUnsignedVC(example);
-
-            // Store unsignedVC into issuer's database
-            const db = firebase.firestore();
-            db.collection('drivinglicense-waiting-approval').add({username: appState.username, payload: unsignedVC, applicationID, approved: false})
-
-            alert('You have successfully submitted your application. (Unsigned VC successfully created.)');
-            }
+          alert('You have successfully submitted your application. (Unsigned VC successfully created.)');
         } catch (error) {
             ApiService.alertWithBrowserConsole(error.message);
         }
     }
     
     const resetToDefaults = () => {
-      setVCschemaData(JSON.stringify(drivingLicenseVCData))
       setinputDID(appState.didToken || '')
 
       setBaseVCData(defaultBaseVCData)
@@ -117,6 +102,11 @@ const Application: React.FC = (): React.ReactElement => {
           </Button>
 
           <p><strong>Step 1:</strong>Please fill in details of your driving license</p>
+          <FormGroup controlId='email'>
+            <FormLabel className='label' style={{margin: '10px 0 0 0'}}>Email Address:</FormLabel>
+            <FormControl name='email' type='text' value={extendVCData.email} onChange={e => updateExtendBaseVC(e)}/>
+          </FormGroup>
+
           <FormGroup controlId='givenName'>
             <FormLabel className='label' style={{margin: '10px 0 0 0'}}>Given Name:</FormLabel>
             <FormControl name='givenName' type='text' value={baseVCData.givenName} onChange={e => updateBaseVC(e)}/>

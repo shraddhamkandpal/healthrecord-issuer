@@ -217,4 +217,15 @@ export default class ApiService {
 
     alert(alertMessage || 'There has been an issue processing your request. Please check the browser console.')
   }
+
+  /**
+   * Method for sharing signed credentials.
+   * Endpoint info: https://cloud-wallet-api.staging.affinity-project.org/api-docs/#/Wallet/ShareCredential.
+   * */
+  static async shareCredentials(claimID: string) {
+    const fullEndpoint = `${endpoints.WALLET_CREDENTIALS}/${claimID}/share`;
+    const a =  await cloudWalletApi.post(fullEndpoint)
+
+    return a.data;
+  }
 }

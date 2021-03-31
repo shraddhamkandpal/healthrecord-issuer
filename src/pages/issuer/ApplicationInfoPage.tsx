@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory, RouteComponentProps } from 'react-router-dom';
 import {Button} from 'react-bootstrap';
 import ApiService from 'utils/apiService';
 import { routes } from 'constants/routes';
 import firebase from 'utils/firebase/firebase';
+import {drivingLicenseVCData} from 'utils/vc-data-examples/drivinglicense';
 
 interface IProps {
   children?: React.ReactNode,
@@ -11,37 +12,62 @@ interface IProps {
 }
 
 const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IProps): React.ReactElement => {
+  const [VCschemaData, setVCschemaData] = useState<any>(JSON.stringify(drivingLicenseVCData));
+
   const { username, payload, applicationID, docID, approved } = props.location.state.state;
-  const holderID = payload.holder.id;
-  const { givenName, familyName } = payload.credentialSubject.data;
-  const { idClass, issueDate, issuer, documentType } = payload.credentialSubject.data.hasIDDocument.hasIDDocument;
-  const { country, drivingClass } = JSON.parse(idClass)
+  const { givenName, familyName, holderDid, idClass, issueDate} = payload;
+  const { drivingLicenseID, country, drivingClass, email, affinidiDrivingLicenseID, issuerOrganization } = JSON.parse(idClass);
 
   const history = useHistory();
+
+  const isJson = (str: string) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+  }
 
   /**
    * Function for signing an unsigned VC.
   * */
   const approveVC = async () => {
     try {
-      // sign the VC
-      const {signedCredential} = await ApiService.signVC({
-        unsignedCredential: payload
-      })
+      if (isJson(VCschemaData)){
+        const example = {...JSON.parse(VCschemaData)}
+        example.data.givenName = givenName;
+        example.data.familyName = familyName;
+        example.data.hasIDDocument.hasIDDocument.issueDate = issueDate;
+        example.data.hasIDDocument.hasIDDocument.idClass = idClass;
+        example.holderDid = holderDid || '';
+        
+        // Build unsigned VC
+        const {unsignedVC} = await ApiService.issueUnsignedVC(example);
 
-      const db = firebase.firestore();
-      
-      // Store the information under Approved Table
-      db.collection('drivinglicense-approved').add({ username, payload, applicationID, approved: true });
+        // Sign the VC
+        const {signedCredential} = await ApiService.signVC({
+          unsignedCredential: unsignedVC
+        })
 
-      // Store the information at the Holder's Table
-      db.collection(`${holderID}`).add({documentType, signedCredential});
+        // Store the VC
+        const {credentialIds} = await ApiService.storeSignedVCs({ data: [signedCredential]})
+        
+        // Share the credentials
+        const claimID: string = credentialIds[0];
+        const {qrCode, sharingUrl} = await ApiService.shareCredentials(claimID)
+        console.log(qrCode)
+        console.log(`Sent QR code to ${email}`)
 
-      // Delete the information under the Pending Approval Table
-      db.collection('drivinglicense-waiting-approval').doc(docID).delete();
+        // const db = firebase.firestore();
+        // // Store the information under Approved Table
+        // db.collection('drivinglicense-approved').add({ username, payload, applicationID, approved: true });
+        // // Delete the information under the Pending Approval Table
+        // db.collection('drivinglicense-waiting-approval').doc(docID).delete();
 
-      alert('Unsigned VC has been approved and successfully signed.');
-      history.push(routes.ISSUER);
+        alert('Unsigned VC has been approved and successfully signed.');
+        history.push(routes.ISSUER);
+      }
     } catch (error) {
       ApiService.alertWithBrowserConsole(error.message);
     }
@@ -54,7 +80,7 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
         <p><strong>Given Name:</strong> {givenName}</p>
         <p><strong>Family Name:</strong> {familyName}</p>
         <p><strong>Date of Issuance:</strong> {issueDate}</p>
-        <p><strong>Issuer Organisation:</strong> {issuer}</p>
+        <p><strong>Issuer Organisation:</strong> {issuerOrganization}</p>
         <p><strong>Country of Issuance:</strong> {country}</p>
         <p><strong>Driving Class:</strong> {drivingClass}</p>
         <Button style={{display: 'block', margin: '10px 0 0 0'}}>View Proof of Document</Button>
