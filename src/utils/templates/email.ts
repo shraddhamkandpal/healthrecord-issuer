@@ -1,10 +1,17 @@
-import aws from 'aws-sdk';
+import { SES } from 'aws-sdk';
+import config from '../config';
 
 // Sender email
-const sender_email = 'hello@example.com';
+const sender_email = 'no-reply@vc-generator.com';
+
 
 export const sendEmail = (qrCode: string, sharingUrl: string, receiver_email: string) => {
-    const ses = new aws.SES();
+    const ses = new SES({
+        apiVersion: '2020-12-01',
+        accessKeyId: config.accessKeyId,
+        secretAccessKey: config.secretAccessKey,
+        region: "us-east-1",
+      });
 
     let ses_mail = "From: 'StartUpA Driving License Issuer' <" + sender_email + ">\n";
     ses_mail = ses_mail + "To: " + receiver_email + "\n";
@@ -18,16 +25,16 @@ export const sendEmail = (qrCode: string, sharingUrl: string, receiver_email: st
     ses_mail = ses_mail + "<body>\n\n";
     ses_mail = ses_mail + "<h2>Your application for verifiable credentials has been approved.</h2>\n\n";
     ses_mail = ses_mail + "<p>You can retrieve and store your verifiable credentials through either the link provided or by scanning the QR code.</p>\n\n";
-    ses_mail = ses_mail + "<p>Link: <a href='"+sharingUrl+"'>Sharing URL</a></p>\n\n";
+    ses_mail = ses_mail + "<p>Link: <a href='" + sharingUrl + "'>Sharing URL</a></p>\n\n";
     ses_mail = ses_mail + "<p>QR Code:</p>\n\n";
-    ses_mail = ses_mail + "<img src="+qrCode+"/>\n\n";
+    ses_mail = ses_mail + "<img src=" + qrCode + "/>\n\n";
     ses_mail = ses_mail + "</body>\n\n";
     ses_mail = ses_mail + "</html>\n\n";
 
     const params = {
-        RawMessage: { Data: btoa(ses_mail) },
-        Destinations: [ receiver_email ],
-        Source: "StartUpA Driving License Issuer' <" + sender_email + ">'"
+        RawMessage: { Data: ses_mail },
+        Destinations: [  receiver_email ],
+        Source: "StartUpA Driving License Issuer <" + sender_email + ">"
     }
 
     ses.sendRawEmail(params, (err, data) => {
