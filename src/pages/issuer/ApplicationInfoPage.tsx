@@ -5,6 +5,7 @@ import ApiService from 'utils/apiService';
 import { routes } from 'constants/routes';
 import firebase from 'utils/firebase/firebase';
 import {drivingLicenseVCData} from 'utils/vc-data-examples/drivinglicense';
+import { sendEmail } from 'utils/templates/email';
 
 interface IProps {
   children?: React.ReactNode,
@@ -56,14 +57,15 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
         // Share the credentials
         const claimID: string = credentialIds[0];
         const {qrCode, sharingUrl} = await ApiService.shareCredentials(claimID)
-        console.log(qrCode)
+        console.log(sharingUrl)
+        sendEmail(qrCode, sharingUrl, email)
         console.log(`Sent QR code to ${email}`)
 
-        // const db = firebase.firestore();
-        // // Store the information under Approved Table
-        // db.collection('drivinglicense-approved').add({ username, payload, applicationID, approved: true });
-        // // Delete the information under the Pending Approval Table
-        // db.collection('drivinglicense-waiting-approval').doc(docID).delete();
+        const db = firebase.firestore();
+        // Store the information under Approved Table
+        db.collection('drivinglicense-approved').add({ username, payload, applicationID, approved: true });
+        // Delete the information under the Pending Approval Table
+        db.collection('drivinglicense-waiting-approval').doc(docID).delete();
 
         alert('Unsigned VC has been approved and successfully signed.');
         history.push(routes.ISSUER);
