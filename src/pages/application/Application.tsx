@@ -71,7 +71,7 @@ const Application: React.FC = (): React.ReactElement => {
           const db = firebase.firestore();
           db.collection('drivinglicense-waiting-approval').add({username: appState.username, payload, applicationID, approved: false})
 
-          alert('You have successfully submitted your application. (Unsigned VC successfully created.)');
+          alert('You have successfully submitted your application.');
         } catch (error) {
             ApiService.alertWithBrowserConsole(error.message);
         }

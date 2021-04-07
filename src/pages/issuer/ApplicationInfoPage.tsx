@@ -67,7 +67,7 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
         // Delete the information under the Pending Approval Table
         db.collection('drivinglicense-waiting-approval').doc(docID).delete();
 
-        alert('Unsigned VC has been approved and successfully signed.');
+        alert('Application has been approved and have alerted the applicant.');
         history.push(routes.ISSUER);
       }
     } catch (error) {
