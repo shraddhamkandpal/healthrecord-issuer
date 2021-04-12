@@ -39,6 +39,7 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
         const example = {...JSON.parse(VCschemaData)}
         example.data.givenName = givenName;
         example.data.familyName = familyName;
+        example.data.email = email;
         example.data.hasIDDocument.hasIDDocument.issueDate = issueDate;
         example.data.hasIDDocument.hasIDDocument.idClass = idClass;
         example.holderDid = holderDid || '';
