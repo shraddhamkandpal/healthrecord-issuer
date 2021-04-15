@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import AppContext from 'context/app';
 import {Button, FormControl, FormGroup, FormLabel, FormFile} from 'react-bootstrap';
 import ApiService from 'utils/apiService';
-import {drivingLicenseVCData} from 'utils/vc-data-examples/drivinglicense';
 import 'pages/application/Application.scss'
 import firebase from 'utils/firebase/firebase';
 import randomstring from 'randomstring';

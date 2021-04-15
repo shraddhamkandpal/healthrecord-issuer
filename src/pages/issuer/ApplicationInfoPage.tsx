@@ -13,11 +13,11 @@ interface IProps {
 }
 
 const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IProps): React.ReactElement => {
-  const [VCschemaData, setVCschemaData] = useState<any>(JSON.stringify(drivingLicenseVCData));
+  const [VCschemaData] = useState<any>(JSON.stringify(drivingLicenseVCData));
 
   const { username, payload, applicationID, docID, approved } = props.location.state.state;
   const { givenName, familyName, holderDid, idClass, issueDate} = payload;
-  const { drivingLicenseID, country, drivingClass, email, affinidiDrivingLicenseID, issuerOrganization } = JSON.parse(idClass);
+  const { country, drivingClass, email, issuerOrganization } = JSON.parse(idClass);
 
   const history = useHistory();
 
@@ -58,9 +58,7 @@ const ApplicationInfoPage: React.FC<IProps & RouteComponentProps> = (props: IPro
         // Share the credentials
         const claimID: string = credentialIds[0];
         const {qrCode, sharingUrl} = await ApiService.shareCredentials(claimID)
-        console.log(sharingUrl)
         sendEmail(qrCode, sharingUrl, email)
-        console.log(`Sent QR code to ${email}`)
 
         const db = firebase.firestore();
         // Store the information under Approved Table
