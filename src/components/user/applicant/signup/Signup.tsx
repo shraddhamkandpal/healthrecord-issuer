@@ -49,7 +49,7 @@ const ApplicantSignup: React.FC = () => {
           username
         })
 
-        history.push(routes.ROOT);
+        history.push(routes.APPLICATION);
       }
       else {
         alert('Please provide a valid username (phone numbers and emails addresses are not allowed).')
