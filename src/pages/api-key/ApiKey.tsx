@@ -8,7 +8,7 @@ const ApiKeyPage = () => {
       <p>Here you will find a link which will lead you to a page where you can generate a new API hash key for your application. You need to use an API hash key to communicate with our web services.</p>
       <p>Note: you only need the <code>API key hash</code> value, the regular API key is used for our SDK.</p>
       <a
-        href='https://affinity-onboarding-frontend.staging.affinity-project.org/?source=vcms-api-sandbox'
+        href='https://apikey.affinidi.com/'
         target='_blank'
         rel='noreferrer noopener'
       >
