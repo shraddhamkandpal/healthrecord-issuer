@@ -50,6 +50,7 @@ const ApplicantSignup: React.FC = () => {
         })
 
         history.push(routes.APPLICATION);
+        alert('You have signed up successfully!')
       }
       else {
         alert('Please provide a valid username (phone numbers and emails addresses are not allowed).')
