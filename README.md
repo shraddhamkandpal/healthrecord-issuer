@@ -1,46 +1,93 @@
-# Getting Started with Create React App
+# Affinidi Use Case Implementation - Driving License - Issuer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Table of contents
 
-## Available Scripts
+- [Introduction](#introduction)
+- [Initial Set Up](#how-to-setup)
 
-In the project directory, you can run:
+  - [Generate Affinidi API Key](#generate-api-key)
+  - [Amazon SES Credentials](#amazon-ses)
+  - [Firebase Credentials](#firebase)
+  - [Configure .env File](#configure-.env-file)
 
-### `npm start`
+- [How to run](#how-to-run)
+  - [Sequence](#sequence)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Introduction
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Welcome to Driving License Use Case - Issuer application. In this application, you will experience how does a normal applicant would like to sign up for a verifiable credential and thereafter how a Issuer checks the information and issues a verifiable credential to the applicant.
 
-### `npm test`
+You can either run this program in your local machine or try it out here: https://usecases.drivinglicense-issuer.vc-generator.com/
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Initial Set Up
 
-### `npm run build`
+### Generate API Key
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Before you could use our API and SDK services, you would have to register to get the API keys.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Go to apikey.affinidi.com
+2. Register for an account
+3. Store the `API Key` and `API Key Hash` safely
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Amazon SES
 
-### `npm run eject`
+In our Issuer application, once the issuer has approved an application, the applicant will receive the credentials through their email. Hence, we will be using Amazon SES services.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+1. Go to AWS Console https://console.aws.amazon.com/
+2. Click on your username near the top right and select My Security Credentials
+3. Under `Access keys for CLI, SDK & API access`, click `Create access key`
+4. Store the `Access key ID` and `Secret access key` safely
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Firebase
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+In our issuer application, we will be using firebase to mimic issuer's database which stores all of the applications.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1. Go to Firebase Console https://console.firebase.google.com/
+2. Create a new Firestore
+3. Navigation to Project Settings
+4. Look for `firebaseConfig` and copy the credentials. It should look like
 
-## Learn More
+```
+  var firebaseConfig = {
+    apiKey: <<SOME API KEY>>,
+    authDomain: "<<SOMEP PROJECT NAME>>.firebaseapp.com",
+    projectId: "<<SOMEP PROJECT NAME>>",
+    storageBucket: "<<SOMEP PROJECT NAME>>.appspot.com",
+    messagingSenderId: <<SOME STRING>>,
+    appId: <<SOME STRING>>
+  };
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Configure .env file
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Open terminal and navigate to the project folder
+2. Run `cp .env.example .env`
+3. Fill in the .env file with the details that you have gathered in the previous steps
+
+```
+REACT_APP_API_KEY=<<Afffinidi's API Key>>
+REACT_APP_API_KEY_HASH=<<Affinidi's API Key Hash>>
+REACT_APP_ENVIRONMENT=prod
+
+REACT_APP_AWS_ACCESS_KEY_ID=<<AWS's Access Key ID>>
+REACT_APP_AWS_SECRET_ACCESS_KEY=<<AWS's Secret access key>>
+
+REACT_APP_FIREBASE_API_KEY=<<Firebase's apiKey>>
+REACT_APP_FIREBASE_AUTHDOMAIN=<<Firebase's authDomain>>
+REACT_APP_FIREBASE_PROJECT_ID=<<Firebase's projectId>>
+REACT_APP_FIREBASE_STORAGEBUCKET=<<Firebase's storageBucket>>
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=<<Firebase's messagingSenderId>>
+REACT_APP_FIREBASE_APP_ID=<<Firebase's appId>>
+```
+
+## How to run
+
+1. Open terminal and navigate to the project folder
+2. Run `npm install`
+3. Run `cp .env.example .env`
+4. Populate the credentials in `.env`
+5. Run `npm start`
+
+### Sequence
+
+Run Issuer, Holder and Verifier in this sequence in your local machine.
