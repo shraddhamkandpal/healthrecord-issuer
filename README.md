@@ -40,6 +40,8 @@ In our Issuer application, once the issuer has approved an application, the appl
 
 ### Firebase
 
+Note: This step will be optional.
+
 In our issuer application, we will be using firebase to mimic issuer's database which stores all of the applications.
 
 1. Go to Firebase Console https://console.firebase.google.com/
