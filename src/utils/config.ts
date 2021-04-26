@@ -12,6 +12,7 @@ const envConfig = {
   env,
   accessApiKey: process.env.REACT_APP_API_KEY_HASH,
   accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+  wallet_url: process.env.REACT_APP_WALLET_URL || 'http://localhost:3001',
   secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
 };
 
