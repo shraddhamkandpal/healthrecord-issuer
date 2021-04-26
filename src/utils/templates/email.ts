@@ -13,7 +13,7 @@ export const sendEmail = (qrCode: string, sharingUrl: string, receiver_email: st
         region: "us-east-1",
       });
     
-    const redirectUrl: string = `http://localhost:3001/accept-credentials?vcURL=${sharingUrl}`
+    const redirectUrl: string = `${config.wallet_url}/accept-credentials?vcURL=${sharingUrl}`
 
     let ses_mail = "From: 'StartUpA Driving License Issuer' <" + sender_email + ">\n";
     ses_mail = ses_mail + "To: " + receiver_email + "\n";
