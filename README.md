@@ -70,6 +70,7 @@ In our issuer application, we will be using firebase to mimic issuer's database 
 REACT_APP_API_KEY=<<Afffinidi's API Key>>
 REACT_APP_API_KEY_HASH=<<Affinidi's API Key Hash>>
 REACT_APP_ENVIRONMENT=prod
+REACT_APP_WALLET_URL=<<URL OF THE WALLET APPLICATION>>
 
 REACT_APP_AWS_ACCESS_KEY_ID=<<AWS's Access Key ID>>
 REACT_APP_AWS_SECRET_ACCESS_KEY=<<AWS's Secret access key>>
