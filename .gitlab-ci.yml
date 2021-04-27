@@ -22,7 +22,7 @@ install:
       - node_modules/
   script:
     - echo "Install project dependecies"
-    - npm install
+    - npm ci
     - echo "Install successful"
 
 # test:
