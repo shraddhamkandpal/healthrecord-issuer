@@ -22,6 +22,8 @@ install:
       - node_modules/
   script:
     - echo "Install project dependecies"
+    - node -v
+    - npm -v
     - npm ci
     - echo "Install successful"
 
