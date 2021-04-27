@@ -13,7 +13,7 @@ stages:
 install:
   <<: *only-default
   stage: install
-  image: node
+  image: node:14.0.0
   cache:
     paths:
       - node_modules/
@@ -40,7 +40,7 @@ install:
 build:
   <<: *only-default
   stage: build
-  image: node
+  image: node:14.0.0
   script:
     - echo "Build started"
     - REACT_APP_API_KEY=$REACT_APP_API_KEY REACT_APP_API_KEY_HASH=$REACT_APP_API_KEY_HASH REACT_APP_ENVIRONMENT=prod npm run build
