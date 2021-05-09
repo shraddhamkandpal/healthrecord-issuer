@@ -4,6 +4,7 @@ import {Button, FormControl, FormGroup, FormLabel, FormFile} from 'react-bootstr
 import ApiService from 'utils/apiService';
 import 'pages/application/Application.scss'
 import firebase from 'utils/firebase/firebase';
+import upload from 'utils/upload';
 import randomstring from 'randomstring';
 
 interface IBaseVCData {
@@ -28,10 +29,10 @@ interface IBaseVCData {
   
   const defaultExtendVCData: IExtendVCData = {
     drivingLicenseID: '',
-    country: 'Singapore',
+    country: 'India',
     drivingClass: '1',
     email: '',
-    issuerOrganization: 'Automobile Association of Singapore'
+    issuerOrganization: 'Hope Clinic'
   }
 
 interface IPayload extends IBaseVCData{
@@ -91,6 +92,14 @@ const Application: React.FC = (): React.ReactElement => {
       setExtendVCData({...extendVCData, [e.target.name]: e.target.value})
     }
 
+    const uploadFileToS3 = (e: any) => {
+      var s3Path = upload(e.target.files[0])
+      //Hack for s3 upload time. Can be fixed by async, promise
+      setTimeout(() => {
+        setExtendVCData({...extendVCData, 'drivingClass': s3Path})
+      }, 10000);
+    }
+
     return (
       <div className='tutorial'>
         <div className='tutorial__step'>
@@ -100,54 +109,37 @@ const Application: React.FC = (): React.ReactElement => {
             >Clear all fields
           </Button>
 
-          <p><strong>Step 1:</strong>Please fill in details of your driving license</p>
+          <p><strong>Step 1:</strong>Please fill in details of the prescription</p>
           <FormGroup controlId='email'>
             <FormLabel className='label' style={{margin: '10px 0 0 0'}}>Email Address:</FormLabel>
             <FormControl name='email' type='text' value={extendVCData.email} onChange={e => updateExtendBaseVC(e)}/>
           </FormGroup>
 
           <FormGroup controlId='givenName'>
-            <FormLabel className='label' style={{margin: '10px 0 0 0'}}>Given Name:</FormLabel>
+            <FormLabel className='label' style={{margin: '10px 0 0 0'}}>First Name:</FormLabel>
             <FormControl name='givenName' type='text' value={baseVCData.givenName} onChange={e => updateBaseVC(e)}/>
           </FormGroup>
 
           <FormGroup controlId='familyName'>
-            <FormLabel style={{margin: '10px 0 0 0'}}>Family Name:</FormLabel>
+            <FormLabel style={{margin: '10px 0 0 0'}}>Last Name:</FormLabel>
             <FormControl name='familyName' type='text' value={baseVCData.familyName} onChange={e => updateBaseVC(e)}/>
           </FormGroup>
 
           <FormGroup controlId='issueDate'>
-            <FormLabel style={{margin: '10px 0 0 0'}}>Date of Issuance:</FormLabel>
+            <FormLabel style={{margin: '10px 0 0 0'}}>Prescription Expiry:</FormLabel>
             <FormControl name='issueDate' type='text' value={baseVCData.issueDate} onChange={e => updateBaseVC(e)}/>
           </FormGroup>
 
           <FormGroup controlId='drivingLicense'>
-            <FormLabel style={{margin: '10px 0 0 0'}}>Driving License ID:</FormLabel>
+            <FormLabel style={{margin: '10px 0 0 0'}}>Adhaar ID:</FormLabel>
             <FormControl name='drivingLicenseID' type='text' value={extendVCData.drivingLicenseID} onChange={e => updateExtendBaseVC(e)}/>
           </FormGroup>
 
-          <FormGroup controlId='drivingClass'>
-            <FormLabel style={{margin: '10px 0 0 0'}}>Driving Class:</FormLabel>
-            <FormControl name='drivingClass' as="select" value={extendVCData.drivingClass} onChange={e => updateExtendBaseVC(e)}>
-              <option>1</option>
-              <option>2</option>
-              <option>2A</option>
-              <option>2B</option>
-              <option>3</option>
-              <option>3A</option>
-              <option>3C</option>
-              <option>3CA</option>
-              <option>4</option>
-              <option>4A</option>
-              <option>5</option>
-            </FormControl>
-          </FormGroup>
-
           <div style={{margin: '30px 0'}}>
-            <p><strong>Step 2:</strong>Upload Proof of Driving License</p>
+            <p><strong>Step 2:</strong>Upload Prescription</p>
             <FormFile id="formcheck-api-regular">
-              <FormFile.Label>Proof of Driving License</FormFile.Label>
-              <FormFile.Input />
+              <FormFile.Label>Prescription</FormFile.Label>
+              <FormFile.Input onChange={e => uploadFileToS3(e)}/>
             </FormFile>
           </div>
           

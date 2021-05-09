@@ -16,8 +16,8 @@ export const drivingLicenseVCData: VCBuildUnsignedInput = {
       '@type': ['Role', 'IDDocumentRole'],
       "hasIDDocument": {
         '@type': 'IDDocument',
-        "issuer": 'Automobile Association of Singapore',
-        "documentType": 'driving_license',
+        "issuer": 'Hope Clinic',
+        "documentType": 'prescription',
         "issueDate": '2019...',
         "classificationMethod": 'automatic',
         "idClass": '...',
@@ -167,7 +167,7 @@ export const unsignedDrivingLicenseVC: UnsignedW3cCredential = {
       "birthDate": "1986-07-01T00:00:00.000Z",
       "givenName": "",
       "familyName": "",
-      "address": "apt. 9, Pushkinsakya 31-V, Kyiv, Ukraine",
+      "address": "Bangalore, India",
       "hasIDDocument": {
         "@type": [
           "Role",
@@ -175,11 +175,11 @@ export const unsignedDrivingLicenseVC: UnsignedW3cCredential = {
         ],
         "hasIDDocument": {
           "@type": "IDDocument",
-          "issuer": "Automobile Association of Singapore",
-          "documentType": "driving_license",
+          "issuer": "Hope Clinic",
+          "documentType": "prescription",
           "issueDate": "",
           "classificationMethod": "automatic",
-          "idClass": "{\"drivingLicenseID\":\"\",\"country\":\"Singapore\",\"drivingClass\":\"1\"}",
+          "idClass": "{\"drivingLicenseID\":\"\",\"country\":\"India\",\"drivingClass\":\"1\"}",
           "countryCode": "..."
         }
       }

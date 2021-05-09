@@ -4,7 +4,7 @@ import IssuerLogin from 'components/user/issuer/login/Login';
 const IssuerLoginPage: React.FC = (): React.ReactElement => {
     return (
       <div className='page-form page-form--slim'>
-        <h1 className='title'>Issuer Login</h1>
+        <h1 className='title'>Clinic Login</h1>
         <p>Log in to continue.</p>
         <IssuerLogin/>
       </div>

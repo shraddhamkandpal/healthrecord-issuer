@@ -32,11 +32,11 @@ const Issuer: React.FC = (): React.ReactElement => {
   return (
       <div className='tutorial'>
         <div className='tutorial__step'>
-          <h3><strong>Pending Approval</strong></h3>
-          {pendingApproval.length !== 0 ? pendingApproval.map((x:any) => <div key={x.docID}><AdminList data={x}/></div>) : <p>No Pending Approvals</p> }
+          <h3><strong>Pending Prescriptions</strong></h3>
+          {pendingApproval.length !== 0 ? pendingApproval.map((x:any) => <div key={x.docID}><AdminList data={x}/></div>) : <p>No Pending Prescriptions</p> }
 
-          <h3><strong>Approved Applications</strong></h3>
-          {approved.length !== 0 ? approved.map((x:any) => <div key={x.docID}><AdminList data={x}/></div>) : <p>No Approved Applications</p> }
+          <h3><strong>Signed Prescriptions</strong></h3>
+          {approved.length !== 0 ? approved.map((x:any) => <div key={x.docID}><AdminList data={x}/></div>) : <p>No Signed Prescriptions</p> }
         </div>
       </div>
   )

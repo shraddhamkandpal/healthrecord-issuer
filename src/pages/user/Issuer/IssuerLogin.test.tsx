@@ -13,7 +13,7 @@ describe("User Page test", () => {
         <h1
           class="title"
         >
-          Issuer Login
+          Clinic Login
         </h1>
         <p>
           Log in to continue.

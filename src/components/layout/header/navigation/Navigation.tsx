@@ -6,7 +6,7 @@ import 'components/layout/header/navigation/Navigation.scss'
 import AppContext from 'context/app';
 import UserLogout from 'components/user/logout/Logout';
 import drivingLicenseLogo from 'assets/images/icons/driving-license.svg';
-import companyNameLogo from 'assets/images/icons/company-name.png';
+import clinicNameLogo from 'assets/images/icons/clinic-name.png';
 
 /**
  * Stateful component responsible for rendering the top navigation of this application.
@@ -26,13 +26,13 @@ const LayoutHeaderNavigation = () => {
     <Navbar expand="lg"
             onToggle={() => setShowNavbar(!showNavbar)}
             expanded={false}
-            className='bg-orange'
+            className='bg-info'
     >
       <Container>
         <NavbarBrand>
           <Link to={routes.ROOT}>
             <img src={drivingLicenseLogo} className='logo-icon' alt='logo'/>
-            <img src={companyNameLogo} className='logo-name' alt='logo-name'/>
+            <img src={clinicNameLogo} className='logo-name' alt='logo-name'/>
           </Link>
         </NavbarBrand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -56,13 +56,10 @@ const LayoutHeaderNavigation = () => {
             {!appState.isAuthenticated && (
               <>
                 <Nav.Item>
-                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.APPLICANT_LOGIN}>Start applying Driving License</Nav.Link>
+                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.APPLICANT_LOGIN}>Write a prescription</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.ISSUER_LOGIN}>Sign in as admin</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.API_KEY}>API Key</Nav.Link>
+                  <Nav.Link as={NavLink} activeClassName='is-active' to={routes.ISSUER_LOGIN}>Sign a Prescription</Nav.Link>
                 </Nav.Item>
               </>
             )}
