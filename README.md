@@ -1,4 +1,4 @@
-# Affinidi Use Case Implementation - Driving License - Issuer
+# Affinidi Use Case Implementation - Health Record - Issuer
 
 ## Table of contents
 
@@ -8,6 +8,7 @@
   - [Generate Affinidi API Key](#generate-api-key)
   - [Amazon SES Credentials](#amazon-ses)
   - [Firebase Credentials](#firebase)
+  - [Amazon S3 Credentials](#amazon-s3)
   - [Configure .env File](#configure-.env-file)
 
 - [How to run](#how-to-run)
@@ -15,9 +16,7 @@
 
 ## Introduction
 
-Welcome to Driving License Use Case - Issuer application. In this application, you will experience how does a normal applicant would like to sign up for a verifiable credential and thereafter how a Issuer checks the information and issues a verifiable credential to the applicant.
-
-You can either run this program in your local machine or try it out here: https://usecases.drivinglicense-issuer.vc-generator.com/
+Welcome to Health Wallet Use Case - Issuer application. In this application, you will experience how does a health record issuer would issue a prescription  and thereafter how a Issuer checks the information and issues a verified health record to the applicant.
 
 ## Initial Set Up
 
@@ -81,6 +80,11 @@ REACT_APP_FIREBASE_PROJECT_ID=<<Firebase's projectId>>
 REACT_APP_FIREBASE_STORAGEBUCKET=<<Firebase's storageBucket>>
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=<<Firebase's messagingSenderId>>
 REACT_APP_FIREBASE_APP_ID=<<Firebase's appId>>
+
+REACT_APP_AWS_S3_BUCKET=<<AWS S3 bucket name>>
+REACT_APP_AWS_S3_REGION=<<AWS S3 region>>
+REACT_APP_AWS_S3_KEY=<<AWS S3 key>>
+REACT_APP_AWS_S3_SECRET=<<AWS S3 secret>>
 ```
 
 ## How to run
